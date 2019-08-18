@@ -67,44 +67,44 @@ func main() {
 
 	// uncomment this block of code when you think you're done implementing NewService :)
 
-	// // start all services
-	// done, _ := srvcA.Start()
-	// defer srvcA.Stop()
-	// <-done
+	// start all services
+	done, _ := srvcA.Start()
+	defer srvcA.Stop()
+	<-done
 
-	// done, _ = srvcB.Start()
-	// defer srvcB.Stop()
-	// <-done
+	done, _ = srvcB.Start()
+	defer srvcB.Stop()
+	<-done
 
-	// done, _ = srvcC.Start()
-	// defer srvcC.Stop()
-	// <-done
+	done, _ = srvcC.Start()
+	defer srvcC.Stop()
+	<-done
 
-	// // timeout, just to make sure everything is connected
-	// time.Sleep(5 * time.Second)
+	// timeout, just to make sure everything is connected
+	time.Sleep(5 * time.Second)
 
-	// // find node B's peer info through node C's DHT
-	// peerB, err := srvcC.DHT().FindPeer(srvcC.Ctx(), srvcB.Host().ID())
-	// if err != nil {
-	// 	log.Error("find peer", "could not find peerB", err)
-	// 	os.Exit(1)
-	// }
+	// find node B's peer info through node C's DHT
+	peerB, err := srvcC.DHT().FindPeer(srvcC.Ctx(), srvcB.Host().ID())
+	if err != nil {
+		log.Error("find peer", "could not find peerB", err)
+		os.Exit(1)
+	}
 
-	// // connect to peer B from peer C
-	// err = srvcC.Host().Connect(srvcC.Ctx(), peerB)
-	// if err != nil {
-	// 	log.Error("connect", "could not connect to peerB", err)
-	// 	os.Exit(1)
-	// }
+	// connect to peer B from peer C
+	err = srvcC.Host().Connect(srvcC.Ctx(), peerB)
+	if err != nil {
+		log.Error("connect", "could not connect to peerB", err)
+		os.Exit(1)
+	}
 
-	// // send a message
-	// msg := []byte("hello friend \n")
-	// err = srvcC.Send(peerB, msg)
-	// if err != nil {
-	// 	log.Error("send", "error", err)
-	// }
+	// send a message
+	msg := []byte("hello friend \n")
+	err = srvcC.Send(peerB, msg)
+	if err != nil {
+		log.Error("send", "error", err)
+	}
 
-	// // continue to run the program (ie. wait until message is sent)
-	// // ctrl+c to exit
-	// select {}
+	// continue to run the program (ie. wait until message is sent)
+	// ctrl+c to exit
+	select {}
 }

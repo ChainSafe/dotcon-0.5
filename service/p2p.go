@@ -37,18 +37,17 @@ func NewService(conf *Config) (*Service, error) {
 	if err != nil {
 		return nil, err
 	}
+	
+	h, err := libp2p.New(ctx, opts...)
+	if err != nil {
+		return nil, err
+	}
 
-	// TODO: create new libp2p node with ctx and opts
-	// https://godoc.org/github.com/libp2p/go-libp2p#New
+	dstore := ds.NewMapDatastore()
+	dht := kaddht.NewDHT(ctx, h, dstore)
 
-	// TODO; create new map datastore
-	// https://godoc.org/github.com/ipfs/go-datastore#MapDatastore
-
-	// TODO: create new kad-dht using ctx, host, and datastore
-	// https://godoc.org/github.com/libp2p/go-libp2p-kad-dht#NewDHT
-
-	// TODO: wrap the host with routed host so we can look up peers in DHT
-	// https://godoc.org/github.com/libp2p/go-libp2p/p2p/host/routed#Wrap
+	// wrap the host with routed host so we can look up peers in DHT
+	h = rhost.Wrap(h, dht)
 
 	h.SetStreamHandler(ProtocolPrefix, handleStream)
 
